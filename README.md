@@ -4,10 +4,15 @@ Dashboard interativo desenvolvido em **Streamlit** para análise de dados de res
 
 ## 🚀 Como Executar
 
+### **🌐 Acesse o Dashboard Online:**
+**[🍕 Dashboard Zomato - Streamlit Cloud](https://rangoserpa.streamlit.app/)**
+
+### **💻 Executar Localmente:**
+
 1. **Clone o repositório**
 ```bash
-git clone https://github.com/seu-usuario/projeto-zomato.git
-cd projeto-zomato
+git clone https://github.com/leoserpaa/Rango-Serpa.git
+cd Rango-Serpa
 ```
 
 2. **Instale as dependências**
@@ -65,7 +70,7 @@ Este projeto foi desenvolvido para treinar habilidades de:
 
 ## 👨‍💻 Desenvolvedor
 
-**Leonardo Serpa** - Cientista de Dados 
+**Leonardo Serpa** - Cientista de Dados
 
 ---
 
