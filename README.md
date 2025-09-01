@@ -69,4 +69,4 @@ Este projeto foi desenvolvido para treinar habilidades de:
 
 ---
 
-**⭐ Se este projeto te ajudou, considere dar uma estrela! ⭐**
+
