@@ -6,9 +6,7 @@ import numpy as np
 
 # Configuração da página
 st.set_page_config(
-    page_title="Dashboard Zomato",
-    page_icon="🍕",
-    layout="wide",
+    page_title="Dashboard Rango Serpa",
     initial_sidebar_state="expanded"
 )
 
