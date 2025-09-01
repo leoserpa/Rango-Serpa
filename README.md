@@ -1,4 +1,4 @@
-# 🍕 Dashboard Zomato - Análise de Restaurantes
+# 🍕 Dashboard Rango Serpa - Análise de Restaurantes
 
 Dashboard interativo desenvolvido em **Streamlit** para análise de dados de restaurantes do **Zomato**.
 
@@ -74,4 +74,4 @@ Este projeto foi desenvolvido para treinar habilidades de:
 
 ---
 
-**⭐ Se este projeto te ajudou, considere dar uma estrela! ⭐**
+
