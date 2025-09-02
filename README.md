@@ -91,7 +91,7 @@ Este projeto foi desenvolvido para treinar habilidades de:
 
 ## 👨‍💻 Desenvolvedor
 
-**Leonardo Serpa** - Cientista de Dados
+**Leonardo Serpa** 
 
 ---
 
