@@ -1,6 +1,6 @@
 # 🍕 Dashboard Rango Serpa - Análise de Restaurantes
 
-Dashboard interativo desenvolvido em **Streamlit** para análise de dados de restaurantes do **Rango Serpa**.
+Dashboard interativo desenvolvido em **Streamlit** para análise de dados de restaurantes do **Zomato**.
 
 ## 🚀 Como Executar
 
@@ -78,12 +78,17 @@ projeto-rango-serpa/
 
 ## 🎯 Objetivo do Projeto
 
-Este projeto foi desenvolvido para treinar habilidades de:
+**Dashboard interativo para análise de restaurantes internacionais, permitindo descoberta de 
+estabelecimentos e insights de mercado gastronômico através de filtros inteligentes e 
+visualizações comparativas.**
+
+Este projeto foi desenvolvido para treinar e demonstrar habilidades de:
 - **Análise exploratória de dados**
 - **Criação de dashboards interativos**
 - **Manipulação de dados com Pandas**
 - **Visualização de dados com Plotly**
 - **Desenvolvimento de aplicações web com Streamlit**
+
 
 
 
