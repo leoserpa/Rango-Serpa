@@ -89,9 +89,10 @@ Este projeto foi desenvolvido para treinar e demonstrar habilidades de:
 - **Visualização de dados com Plotly**
 - **Desenvolvimento de aplicações web com Streamlit**
 
+- ## 📚 Fonte dos Dados
 
-
-
+Os dados utilizados foram obtidos no Kaggle:
+[Zomato Restaurants Data — por Shruti Mehta](https://www.kaggle.com/datasets/shrutimehta/zomato-restaurants-data?select=zomato.csv)
 
 
 ## 👨‍💻 Desenvolvedor
