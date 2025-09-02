@@ -72,7 +72,10 @@ projeto-rango-serpa/
 ├── requirements.txt          # Dependências
 ├── README.md                # Este arquivo
 └── img/                     # Pasta de imagens
-    └── img1.png            # Logo do projeto
+    ├── img1.png            # Logo do projeto
+    ├── pagina_principal.png # Screenshot da página principal
+    ├── analise_paises.png  # Screenshot da análise por países
+    └── analise_cidades.png # Screenshot da análise por cidades
 ```
 
 ## 🎯 Objetivo do Projeto
