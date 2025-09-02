@@ -40,19 +40,17 @@ streamlit run Streamlit_project.py
 - Filtro por países selecionados
 - 5 gráficos: culinárias populares, ranking de cidades, qualidade e diversidade
 
-## 🖼️ Screenshots e Demo
+## 🖼️ Imagens do Projeto
 
 ### 📱 **Página Principal**
 ![Página Principal](img/pagina_principal.png)
-*Filtros inteligentes e estatísticas gerais dos restaurantes*
 
 ### 🌍 **Análise por Países**
 ![Análise por Países](img/analise_paises.png)
-*Dashboard comparativo com 4 gráficos de análise por país*
 
 ### 🏙️ **Análise por Cidades**
 ![Análise por Cidades](img/analise_cidades.png)
-*Ranking de cidades e diversidade culinária por região*
+
 
 
 
