@@ -344,11 +344,14 @@ elif page == "Países":
             y=country_restaurants.index,
             orientation='h',
             title="🍽️ Quantidade de Restaurantes por País",
-            color_discrete_sequence=['#2E86AB']  # Azul profissional para restaurantes
+            color_discrete_sequence=['#2E86AB'],  # Azul profissional para restaurantes
+            labels={'x': 'Quantidade de Restaurantes', 'y': 'País'}
         )
         fig_restaurants.update_layout(
             showlegend=False,
             height=400,
+            xaxis_title="Quantidade de Restaurantes",
+            yaxis_title="País",
             margin=dict(l=20, r=20, t=40, b=20)
         )
         st.plotly_chart(fig_restaurants, width='stretch')
@@ -384,11 +387,14 @@ elif page == "Países":
             y=country_cities.index,
             orientation='h',
             title="🏙️ Quantidade de Cidades por País",
-            color_discrete_sequence=['#A23B72']  # Roxo elegante para cidades
+            color_discrete_sequence=['#A23B72'],  # Roxo elegante para cidades
+            labels={'x': 'Quantidade de Cidades', 'y': 'País'}
         )
         fig_cities.update_layout(
             showlegend=False,
             height=400,
+            xaxis_title="Quantidade de Cidades",
+            yaxis_title="País",
             margin=dict(l=20, r=20, t=40, b=20)
         )
         st.plotly_chart(fig_cities, width='stretch')
@@ -401,11 +407,14 @@ elif page == "Países":
             y=country_votes.index,
             orientation='h',
             title="⭐ Quantidade de Avaliações por País",
-            color_discrete_sequence=['#F18F01']  # Laranja vibrante para avaliações
+            color_discrete_sequence=['#F18F01'],  # Laranja vibrante para avaliações
+            labels={'x': 'Total de Avaliações', 'y': 'País'}
         )
         fig_votes.update_layout(
             showlegend=False,
             height=400,
+            xaxis_title="Total de Avaliações",
+            yaxis_title="País",
             margin=dict(l=20, r=20, t=40, b=20)
         )
         st.plotly_chart(fig_votes, width='stretch')
@@ -449,7 +458,8 @@ elif page == "Cidades":
     fig_cuisine_pie = px.pie(
         values=cuisine_principal_counts.values,
         names=cuisine_principal_counts.index,
-        title=f"Top 10 Culinárias Principais Mais Populares - {countries_text}"
+        title="🍕 Top 10 Culinárias Principais Mais Populares",
+        labels={'value': 'Quantidade de Restaurantes', 'name': 'Tipo de Culinária'}
     )
     st.plotly_chart(fig_cuisine_pie, width='stretch')
     
