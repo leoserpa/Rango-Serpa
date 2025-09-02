@@ -10,6 +10,107 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+# Função para padronizar culinárias
+def padronizar_culinarias(df):
+    """
+    Padroniza os nomes das culinárias para melhor análise:
+    1. Padroniza nomes (ex: sempre usar "Italian" como base)
+    2. Separa estilos múltiplos e conta individualmente
+    3. Agrupa por culinária principal
+    """
+    
+    # Dicionário de padronização de nomes
+    padronizacao = {
+        # Culinárias italianas
+        'Italian': 'Italian',
+        'Pizza': 'Italian',
+        'Pasta': 'Italian',
+        'Mediterranean': 'Italian',
+        
+        # Culinárias asiáticas
+        'Chinese': 'Chinese',
+        'Japanese': 'Japanese',
+        'Thai': 'Thai',
+        'Korean': 'Korean',
+        'Vietnamese': 'Vietnamese',
+        'Asian': 'Asian',
+        
+        # Culinárias indianas
+        'Indian': 'Indian',
+        'North Indian': 'Indian',
+        'South Indian': 'Indian',
+        'Mughlai': 'Indian',
+        'Hyderabadi': 'Indian',
+        
+        # Culinárias americanas
+        'American': 'American',
+        'Mexican': 'Mexican',
+        'BBQ': 'American',
+        'Burgers': 'American',
+        'Steakhouse': 'American',
+        
+        # Culinárias europeias
+        'French': 'French',
+        'German': 'German',
+        'Spanish': 'Spanish',
+        'Greek': 'Greek',
+        'Turkish': 'Turkish',
+        
+        # Fast Food e outras
+        'Fast Food': 'Fast Food',
+        'Street Food': 'Street Food',
+        'Cafe': 'Cafe',
+        'Bakery': 'Bakery',
+        'Desserts': 'Desserts',
+        'Ice Cream': 'Desserts',
+        
+        # Culinárias específicas
+        'Seafood': 'Seafood',
+        'Vegetarian': 'Vegetarian',
+        'Vegan': 'Vegetarian',
+        'Halal': 'Halal',
+        'Kosher': 'Kosher'
+    }
+    
+    # Criar cópia do dataframe
+    df_padronizado = df.copy()
+    
+    # Lista para armazenar todas as culinárias individuais
+    todas_culinarias = []
+    
+    # Processar cada linha
+    for idx, row in df_padronizado.iterrows():
+        cuisines_str = str(row['Cuisines'])
+        
+        # Pular valores nulos ou vazios
+        if pd.isna(cuisines_str) or cuisines_str in ['nan', 'NaN', 'None', '', 'Não especificado']:
+            todas_culinarias.append(['Não especificado'])
+            continue
+        
+        # Separar culinárias múltiplas (separadas por vírgula)
+        cuisines_list = [c.strip() for c in cuisines_str.split(',')]
+        
+        # Padronizar cada culinária individual
+        cuisines_padronizadas = []
+        for cuisine in cuisines_list:
+            cuisine = cuisine.strip()
+            if cuisine:
+                # Aplicar padronização se existir no dicionário
+                if cuisine in padronizacao:
+                    cuisines_padronizadas.append(padronizacao[cuisine])
+                else:
+                    # Se não estiver no dicionário, manter o nome original
+                    cuisines_padronizadas.append(cuisine)
+        
+        todas_culinarias.append(cuisines_padronizadas)
+    
+    # Adicionar colunas com culinárias padronizadas
+    df_padronizado['Cuisines_Padronizadas'] = todas_culinarias
+    df_padronizado['Cuisine_Principal'] = [cuisines[0] if cuisines else 'Não especificado' for cuisines in todas_culinarias]
+    df_padronizado['Total_Cuisines'] = [len(cuisines) for cuisines in todas_culinarias]
+    
+    return df_padronizado
+
 # Função para carregar dados
 @st.cache_data
 def load_data():
@@ -48,6 +149,9 @@ def load_data():
     # Limpar dados da coluna City (remover valores nulos)
     df = df.dropna(subset=['City'])
     
+    # APLICAR PADRONIZAÇÃO DE CULINÁRIAS
+    df = padronizar_culinarias(df)
+    
     return df
 
 # Carregar dados
@@ -81,9 +185,9 @@ if page == "Página Principal":
         cities = ['Todos'] + sorted(country_df['City'].unique().tolist())
     selected_city = st.sidebar.selectbox("🏙️ Cidade", cities)
     
-    # Filtro por culinária
-    cuisines = ['Todas'] + sorted(df['Cuisines'].unique().tolist())
-    selected_cuisine = st.sidebar.selectbox("🍽️ Culinária", cuisines)
+    # Filtro por culinária (usando culinárias padronizadas)
+    cuisines_principais = ['Todas'] + sorted(df['Cuisine_Principal'].unique().tolist())
+    selected_cuisine = st.sidebar.selectbox("🍽️ Culinária Principal", cuisines_principais)
     
     # Filtro por avaliação
     min_rating = st.sidebar.slider("⭐ Avaliação Mínima", 0.0, 5.0, 0.0, 0.1)
@@ -102,7 +206,7 @@ if page == "Página Principal":
         filtered_df = filtered_df[filtered_df['City'] == selected_city]
     
     if selected_cuisine != 'Todas':
-        filtered_df = filtered_df[filtered_df['Cuisines'] == selected_cuisine]
+        filtered_df = filtered_df[filtered_df['Cuisine_Principal'] == selected_cuisine]
     
     filtered_df = filtered_df[filtered_df['Aggregate rating'] >= min_rating]
     
@@ -116,7 +220,7 @@ if page == "Página Principal":
     # Conteúdo principal
     st.subheader("📍 Restaurantes Encontrados")
     st.dataframe(
-        filtered_df[['Restaurant Name', 'City', 'Cuisines', 'Aggregate rating', 'Price Type']],
+        filtered_df[['Restaurant Name', 'City', 'Cuisine_Principal', 'Cuisines', 'Aggregate rating', 'Price Type']],
         use_container_width=True
     )
     
@@ -150,9 +254,9 @@ if page == "Página Principal":
     
     with col4:
         st.metric(
-            label="🍕 Culinárias",
-            value=df['Cuisines'].nunique(),
-            help="Total de tipos de culinária disponíveis"
+            label="🍕 Culinárias Principais",
+            value=df['Cuisine_Principal'].nunique(),
+            help="Total de tipos de culinária principal disponíveis"
         )
     
     with col5:
@@ -184,9 +288,9 @@ if page == "Página Principal":
     
     with col8:
         st.metric(
-            label="🍕 Culinárias Filtradas",
-            value=filtered_df['Cuisines'].nunique(),
-            help="Quantidade de culinárias nos resultados filtrados"
+            label="🍕 Culinárias Principais Filtradas",
+            value=filtered_df['Cuisine_Principal'].nunique(),
+            help="Quantidade de culinárias principais nos resultados filtrados"
         )
     
     with col9:
@@ -200,7 +304,7 @@ if page == "Página Principal":
     st.markdown("---")
     st.markdown("**Powered by Streamlit | Desenvolvido por Leonardo Serpa**")
 
-# PAÍSES
+# PAÍSES (mantido como estava, mas usando culinárias padronizadas)
 elif page == "Países":
     st.title("🌍 Análise de Países")
     
@@ -226,7 +330,10 @@ elif page == "Países":
     # Mostrar informações do filtro aplicado
     st.info(f"📍 **Países selecionados:** {countries_text_paises} | **Total de cidades:** {df_filtered_paises['City'].nunique()} | **Total de restaurantes:** {len(df_filtered_paises)}")
     
-    # Gráficos lado a lado - Primeira linha
+    # Gráficos organizados em grade 2x2
+    st.subheader("📊 Análise Comparativa por País")
+    
+    # Primeira linha de gráficos
     col1, col2 = st.columns(2)
     
     with col1:
@@ -236,11 +343,15 @@ elif page == "Países":
             x=country_restaurants.values,
             y=country_restaurants.index,
             orientation='h',
-            title=f"Quantidade de Restaurantes por País - {countries_text_paises}",
+            title="🍽️ Quantidade de Restaurantes por País",
             color_discrete_sequence=['#2E86AB']  # Azul profissional para restaurantes
         )
-        fig_restaurants.update_layout(showlegend=False)
-        st.plotly_chart(fig_restaurants, use_container_width=True)
+        fig_restaurants.update_layout(
+            showlegend=False,
+            height=400,
+            margin=dict(l=20, r=20, t=40, b=20)
+        )
+        st.plotly_chart(fig_restaurants, width='stretch')
     
     with col2:
         # Gráfico 2: Média de preço para duas pessoas por país
@@ -249,18 +360,20 @@ elif page == "Países":
             x=country_avg_cost.values,
             y=country_avg_cost.index,
             orientation='h',
-            title=f"Média de Preço para Duas Pessoas por País - {countries_text_paises}",
+            title="💰 Média de Preço para Duas Pessoas por País",
             color_discrete_sequence=['#C73E1D'],  # Vermelho escuro para preços
             labels={'x': 'Preço Médio', 'y': 'País'}
         )
         fig_avg_cost.update_layout(
             showlegend=False,
+            height=400,
             xaxis_title="Preço Médio para Duas Pessoas",
-            yaxis_title="País"
+            yaxis_title="País",
+            margin=dict(l=20, r=20, t=40, b=20)
         )
-        st.plotly_chart(fig_avg_cost, use_container_width=True)
+        st.plotly_chart(fig_avg_cost, width='stretch')
     
-    # Gráficos lado a lado - Segunda linha
+    # Segunda linha de gráficos
     col3, col4 = st.columns(2)
     
     with col3:
@@ -270,11 +383,15 @@ elif page == "Países":
             x=country_cities.values,
             y=country_cities.index,
             orientation='h',
-            title=f"Quantidade de Cidades Registradas por País - {countries_text_paises}",
+            title="🏙️ Quantidade de Cidades por País",
             color_discrete_sequence=['#A23B72']  # Roxo elegante para cidades
         )
-        fig_cities.update_layout(showlegend=False)
-        st.plotly_chart(fig_cities, use_container_width=True)
+        fig_cities.update_layout(
+            showlegend=False,
+            height=400,
+            margin=dict(l=20, r=20, t=40, b=20)
+        )
+        st.plotly_chart(fig_cities, width='stretch')
     
     with col4:
         # Gráfico 4: Quantidade de avaliações por país
@@ -283,17 +400,21 @@ elif page == "Países":
             x=country_votes.values,
             y=country_votes.index,
             orientation='h',
-            title=f"Quantidade de Avaliações Feitas por País - {countries_text_paises}",
+            title="⭐ Quantidade de Avaliações por País",
             color_discrete_sequence=['#F18F01']  # Laranja vibrante para avaliações
         )
-        fig_votes.update_layout(showlegend=False)
-        st.plotly_chart(fig_votes, use_container_width=True)
+        fig_votes.update_layout(
+            showlegend=False,
+            height=400,
+            margin=dict(l=20, r=20, t=40, b=20)
+        )
+        st.plotly_chart(fig_votes, width='stretch')
     
     # Footer da página países
     st.markdown("---")
     st.markdown("**Powered by Streamlit | Desenvolvido por Leonardo Serpa**")
 
-# CIDADES
+# CIDADES (mantido como estava, mas usando culinárias padronizadas)
 elif page == "Cidades":
     st.title("🏙️ Análise de Cidades")
     
@@ -322,41 +443,39 @@ elif page == "Cidades":
     # Mostrar informações do filtro aplicado
     st.info(f"📍 **Países selecionados:** {countries_text} | **Total de cidades:** {df_filtered['City'].nunique()} | **Total de restaurantes:** {len(df_filtered)}")
     
-    # Gráfico 1: Culinárias mais populares (ACIMA dos dois gráficos lado a lado)
-    st.subheader("🍕 Culinárias Mais Populares - Diversidade Gastronômica")
-    cuisine_counts = df_filtered['Cuisines'].value_counts().head(10)
+    # Gráfico 1: Culinárias principais mais populares (usando culinárias padronizadas)
+    st.subheader("🍕 Culinárias Principais Mais Populares - Diversidade Gastronômica")
+    cuisine_principal_counts = df_filtered['Cuisine_Principal'].value_counts().head(10)
     fig_cuisine_pie = px.pie(
-        values=cuisine_counts.values,
-        names=cuisine_counts.index,
-        title=f"Top 10 Culinárias Mais Populares - {countries_text}"
+        values=cuisine_principal_counts.values,
+        names=cuisine_principal_counts.index,
+        title=f"Top 10 Culinárias Principais Mais Populares - {countries_text}"
     )
-    st.plotly_chart(fig_cuisine_pie, use_container_width=True)
+    st.plotly_chart(fig_cuisine_pie, width='stretch')
     
-    # Gráficos 2 e 3 lado a lado: Ranking de cidades e Diversidade culinária
+    # Gráficos organizados em grade 2x2
     st.subheader("🏆 Análise de Cidades e Diversidade Culinária")
     
     # Calcular dados para ambos os gráficos
     city_counts = df_filtered['City'].value_counts()
     
-    # Calcular para cada cidade: quantidade de restaurantes e tipos de culinárias únicos
+    # Calcular para cada cidade: quantidade de restaurantes e tipos de culinárias principais únicos
     city_diversity = df_filtered.groupby('City').agg({
         'Restaurant Name': 'count',  # Conta restaurantes
-        'Cuisines': 'nunique'        # Conta tipos de culinárias únicos
+        'Cuisine_Principal': 'nunique'        # Conta tipos de culinárias principais únicos
     }).rename(columns={
         'Restaurant Name': 'Total_Restaurantes',
-        'Cuisines': 'Tipos_Culinarias_Unicos'
+        'Cuisine_Principal': 'Tipos_Culinarias_Principais_Unicos'
     })
     
     # Ordenar por quantidade de restaurantes (critério principal)
     city_diversity = city_diversity.sort_values('Total_Restaurantes', ascending=False)
     
-    # Criar duas colunas para os gráficos
+    # Primeira linha de gráficos
     col_cities, col_diversity = st.columns(2)
     
     with col_cities:
         # Gráfico 2: Ranking das cidades com mais restaurantes
-        st.subheader("🏆 Ranking das Cidades com Mais Restaurantes")
-        
         # Adaptar o número de cidades mostradas
         if len(city_counts) >= 15:
             max_cities = 15
@@ -377,16 +496,20 @@ elif page == "Cidades":
             x=city_counts_display.values,
             y=city_counts_display.index,
             orientation='h',
-            title=f"{title_cities} com Mais Restaurantes - {countries_text}",
+            title="🏆 Ranking das Cidades com Mais Restaurantes",
             color_discrete_sequence=['#4ECDC4']
         )
-        fig_cities_ranking.update_layout(showlegend=False, height=400)
-        st.plotly_chart(fig_cities_ranking, use_container_width=True)
+        fig_cities_ranking.update_layout(
+            showlegend=False, 
+            height=400,
+            xaxis_title="Quantidade de Restaurantes",
+            yaxis_title="Cidade",
+            margin=dict(l=20, r=20, t=40, b=20)
+        )
+        st.plotly_chart(fig_cities_ranking, width='stretch')
     
     with col_diversity:
-        # Gráfico 3: Top cidades com mais restaurantes e tipos de culinárias distintos
-        st.subheader("🍽️ Top Cidades com Mais Restaurantes e Tipos de Culinárias Distintos")
-        
+        # Gráfico 3: Top cidades com mais restaurantes e tipos de culinárias principais distintos
         if len(city_diversity) > 0:
             # Adaptar o número de cidades mostradas
             if len(city_diversity) >= 10:
@@ -404,19 +527,19 @@ elif page == "Cidades":
             
             # Criar gráfico de barras com duas métricas
             fig_diversity = px.bar(
-                x=top_diversity.index,
-                y=top_diversity['Total_Restaurantes'],
-                title=f"{title_diversity} com Mais Restaurantes e Diversidade Culinária - {countries_text}",
-                color_discrete_sequence=['#FFD700'],  # Cor dourada para destacar
-                labels={'x': 'Cidade', 'y': 'Total de Restaurantes'}
-            )
+                 x=top_diversity.index,
+                 y=top_diversity['Total_Restaurantes'],
+                 title="🍕 Top Cidades com Mais Restaurantes e Diversidade Culinária",
+                 color_discrete_sequence=['#FFD700'],  # Cor dourada para destacar
+                 labels={'x': 'Cidade', 'y': 'Total de Restaurantes'}
+             )
             
-            # Adicionar anotações com a quantidade de tipos de culinárias
+            # Adicionar anotações com a quantidade de tipos de culinárias principais
             for i, (city, row) in enumerate(top_diversity.iterrows()):
                 fig_diversity.add_annotation(
                     x=city,
                     y=row['Total_Restaurantes'] + (row['Total_Restaurantes'] * 0.05),  # Posicionar acima da barra
-                    text=f"🍕 {int(row['Tipos_Culinarias_Unicos'])} tipos",
+                    text=f"🍕 {int(row['Tipos_Culinarias_Principais_Unicos'])} tipos",
                     showarrow=False,
                     font=dict(size=10, color='#FF6B6B'),
                     bgcolor='rgba(255, 255, 255, 0.8)',
@@ -429,14 +552,14 @@ elif page == "Cidades":
                 height=400,
                 xaxis_title="Cidade",
                 yaxis_title="Total de Restaurantes",
-                xaxis={'categoryorder':'total descending'}
+                margin=dict(l=20, r=20, t=40, b=20)
             )
             
-            st.plotly_chart(fig_diversity, use_container_width=True)
+            st.plotly_chart(fig_diversity, width='stretch')
         else:
             st.info(f"Nenhuma cidade encontrada nos países selecionados")
     
-    # Gráficos 4 e 5 lado a lado: Média de avaliação acima e abaixo de 4
+    # Segunda linha de gráficos
     st.subheader("⭐ Análise de Qualidade por Cidade - Média de Avaliação")
     
     # Calcular média de avaliação por cidade
@@ -468,11 +591,17 @@ elif page == "Cidades":
                 x=top_cities.values,
                 y=top_cities.index,
                 orientation='h',
-                title=f"{title_top} - {countries_text}",
+                title="⭐ Cidades com Média Acima de 4",
                 color_discrete_sequence=['#FF6B6B']
             )
-            fig_top_cities.update_layout(showlegend=False, height=300)
-            st.plotly_chart(fig_top_cities, use_container_width=True)
+            fig_top_cities.update_layout(
+                showlegend=False, 
+                height=400,
+                xaxis_title="Avaliação Média",
+                yaxis_title="Cidade",
+                margin=dict(l=20, r=20, t=40, b=20)
+            )
+            st.plotly_chart(fig_top_cities, width='stretch')
         else:
             st.info(f"Nenhuma cidade encontrada com média de avaliação acima de 4.0")
     
@@ -499,16 +628,20 @@ elif page == "Cidades":
                 x=below_4_cities.values,
                 y=below_4_cities.index,
                 orientation='h',
-                title=f"{title_below_4} - {countries_text}",
+                title="⭐ Cidades com Média Abaixo de 4",
                 color_discrete_sequence=['#FFA500']  # Cor laranja para diferenciar
             )
-            fig_below_4_cities.update_layout(showlegend=False, height=300)
-            st.plotly_chart(fig_below_4_cities, use_container_width=True)
+            fig_below_4_cities.update_layout(
+                showlegend=False, 
+                height=400,
+                xaxis_title="Avaliação Média",
+                yaxis_title="Cidade",
+                margin=dict(l=20, r=20, t=40, b=20)
+            )
+            st.plotly_chart(fig_below_4_cities, width='stretch')
         else:
             st.info(f"Nenhuma cidade encontrada com média de avaliação abaixo de 4.0")
     
     # Footer da página cidades
     st.markdown("---")
     st.markdown("**Powered by Streamlit | Desenvolvido por Leonardo Serpa**")
-
-

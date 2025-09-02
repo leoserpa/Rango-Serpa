@@ -1,11 +1,11 @@
 # 🍕 Dashboard Rango Serpa - Análise de Restaurantes
 
-Dashboard interativo desenvolvido em **Streamlit** para análise de dados de restaurantes do **Zomato**.
+Dashboard interativo desenvolvido em **Streamlit** para análise de dados de restaurantes do **Rango Serpa**.
 
 ## 🚀 Como Executar
 
 ### **🌐 Acesse o Dashboard Online:**
-**[🍕 Dashboard Zomato - Streamlit Cloud](https://rangoserpa.streamlit.app/)**
+**[🍕 Dashboard Rango Serpa - Streamlit Cloud](https://rangoserpa.streamlit.app/)**
 
 ### **💻 Executar Localmente:**
 
@@ -50,7 +50,7 @@ streamlit run Streamlit_project.py
 ## 📁 Estrutura
 
 ```
-projeto-zomato/
+projeto-rango-serpa/
 ├── Streamlit_project.py      # Aplicação principal
 ├── dataset_atualizado.csv    # Dataset dos restaurantes
 ├── requirements.txt          # Dependências
