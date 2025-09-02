@@ -172,10 +172,19 @@ if page == "Página Principal":
     
     # Filtros no sidebar
     st.sidebar.header("🔍 Filtros")
+
+    # Se o botão de limpar tiver sido clicado, aplicar valores padrão ANTES de instanciar widgets
+    if st.session_state.get("do_reset_filters", False):
+        st.session_state["f_country"] = "Todos"
+        st.session_state["f_city"] = "Todos"
+        st.session_state["f_cuisine"] = "Todas"
+        st.session_state["f_min_rating"] = 0.0
+        st.session_state["f_price"] = "Todos"
+        st.session_state["do_reset_filters"] = False
     
     # Filtro por país
     countries = ['Todos'] + sorted(df['Country'].unique().tolist())
-    selected_country = st.sidebar.selectbox("🌍 País", countries)
+    selected_country = st.sidebar.selectbox("🌍 País", countries, key="f_country")
     
     # Filtro por cidade (dependente do país)
     if selected_country == 'Todos':
@@ -183,18 +192,18 @@ if page == "Página Principal":
     else:
         country_df = df[df['Country'] == selected_country]
         cities = ['Todos'] + sorted(country_df['City'].unique().tolist())
-    selected_city = st.sidebar.selectbox("🏙️ Cidade", cities)
+    selected_city = st.sidebar.selectbox("🏙️ Cidade", cities, key="f_city")
     
     # Filtro por culinária (usando culinárias padronizadas)
     cuisines_principais = ['Todas'] + sorted(df['Cuisine_Principal'].unique().tolist())
-    selected_cuisine = st.sidebar.selectbox("🍽️ Culinária Principal", cuisines_principais)
+    selected_cuisine = st.sidebar.selectbox("🍽️ Culinária Principal", cuisines_principais, key="f_cuisine")
     
     # Filtro por avaliação
-    min_rating = st.sidebar.slider("⭐ Avaliação Mínima", 0.0, 5.0, 0.0, 0.1)
+    min_rating = st.sidebar.slider("⭐ Avaliação Mínima", 0.0, 5.0, 0.0, 0.1, key="f_min_rating")
     
     # Filtro por tipo de preço
     price_types = ['Todos'] + sorted(df['Price Type'].unique().tolist())
-    selected_price_type = st.sidebar.selectbox("💰 Tipo de Preço", price_types)
+    selected_price_type = st.sidebar.selectbox("💰 Tipo de Preço", price_types, key="f_price")
     
     # Aplicar filtros
     filtered_df = df.copy()
@@ -214,8 +223,11 @@ if page == "Página Principal":
         filtered_df = filtered_df[filtered_df['Price Type'] == selected_price_type]
     
     # Botão para limpar filtros
-    if st.sidebar.button("🔄 Limpar Filtros"):
-        st.rerun()
+    # Botão para limpar filtros: apenas seta flag; a aplicação do reset ocorre antes dos widgets
+    def _trigger_reset_filters():
+        st.session_state["do_reset_filters"] = True
+
+    st.sidebar.button("🔄 Limpar Filtros", on_click=_trigger_reset_filters)
     
     # Conteúdo principal
     st.subheader("📍 Restaurantes Encontrados")
