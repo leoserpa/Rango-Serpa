@@ -5,7 +5,7 @@ Dashboard interativo desenvolvido em **Streamlit** para análise de dados de res
 ## 🚀 Como Executar
 
 ### **🌐 Acesse o Dashboard Online:**
-**[🍕 Dashboard Rango Serpa - Streamlit Cloud](https://rangooserpa.streamlit.app/)**
+**[🍕 Dashboard Rango Serpa - Streamlit Cloud](https://rangoserpa.streamlit.app/)**
 
 ### **💻 Executar Localmente:**
 
