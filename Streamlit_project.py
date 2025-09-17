@@ -666,4 +666,5 @@ elif page == "Cidades":
     
     # Footer da página cidades
     st.markdown("---")
-    st.markdown("**Powered by Streamlit | Desenvolvido por Leonardo Serpa**")
+
+    st.markdown("**Criado com Streamlit por Leonardo Serpa**")
