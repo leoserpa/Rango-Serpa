@@ -87,9 +87,6 @@ Criar uma ferramenta de Business Intelligence que permita:
 - **Insights de mercado** para investidores e empreendedores do setor
 - **Tomada de decisão** baseada em dados reais de 9.500+ estabelecimentos
 
-### **💡 Problema Resolvido:**
-O mercado gastronômico carece de ferramentas que transformem dados dispersos em informações úteis. Este dashboard centraliza análises complexas em uma interface intuitiva, democratizando o acesso a insights de mercado.
-
 ### **🛠️ Habilidades Demonstradas:**
 - **Análise exploratória de dados** com Pandas
 - **Visualização interativa** com Plotly
