@@ -5,13 +5,13 @@ Dashboard interativo desenvolvido em **Streamlit** para análise de dados de res
 ## 🚀 Como Executar
 
 ### **🌐 Acesse o Dashboard Online:**
-**[🍕 Dashboard Rango Serpa - Streamlit Cloud](https://rango-serpa.streamlit.app/)**
+**[🍕 Dashboard Rango Serpa - Streamlit Cloud](https://rangoserpa.streamlit.app/)**
 
 ### **💻 Executar Localmente:**
 
 1. **Clone o repositório**
 ```bash
-git clone https://github.com/leoserpaa/Rango-Serpa.git
+git clone https://github.com/leoserpa/Rango-Serpa.git
 cd Rango-Serpa
 ```
 
@@ -78,16 +78,24 @@ projeto-rango-serpa/
 
 ## 🎯 Objetivo do Projeto
 
-**Dashboard interativo para análise de restaurantes internacionais, permitindo descoberta de 
-estabelecimentos e insights de mercado gastronômico através de filtros inteligentes e 
-visualizações comparativas.**
+**Transformar dados brutos do Zomato em insights acionáveis para o mercado gastronômico através de um dashboard interativo e inteligente.**
 
-Este projeto foi desenvolvido para treinar e demonstrar habilidades de:
-- **Análise exploratória de dados**
-- **Criação de dashboards interativos**
-- **Manipulação de dados com Pandas**
-- **Visualização de dados com Plotly**
-- **Desenvolvimento de aplicações web com Streamlit**
+### **🚀 Missão:**
+Criar uma ferramenta de Business Intelligence que permita:
+- **Descoberta de restaurantes** baseada em preferências personalizadas
+- **Análise comparativa** entre países, cidades e tipos de culinária
+- **Insights de mercado** para investidores e empreendedores do setor
+- **Tomada de decisão** baseada em dados reais de 9.500+ estabelecimentos
+
+### **💡 Problema Resolvido:**
+O mercado gastronômico carece de ferramentas que transformem dados dispersos em informações úteis. Este dashboard centraliza análises complexas em uma interface intuitiva, democratizando o acesso a insights de mercado.
+
+### **🛠️ Habilidades Demonstradas:**
+- **Análise exploratória de dados** com Pandas
+- **Visualização interativa** com Plotly
+- **Desenvolvimento web** com Streamlit
+- **UX/UI** para dashboards de dados
+- **Deploy em nuvem** com Streamlit Cloud
 
 - ## 📚 Fonte dos Dados
 
@@ -100,5 +108,4 @@ Os dados utilizados foram obtidos no Kaggle:
 **Leonardo Serpa** 
 
 ---
-
 
